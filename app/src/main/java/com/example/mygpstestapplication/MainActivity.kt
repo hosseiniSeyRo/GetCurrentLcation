@@ -70,8 +70,8 @@ class MainActivity : AppCompatActivity() {
         return null
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
         gpsTracker?.stopUsingGPS()
+        super.onPause()
     }
 }

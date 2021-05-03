@@ -91,12 +91,14 @@ class GpsTracker extends Service implements LocationListener {
                             MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
                     location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    Log.e("RHLog", "location: " + location.getLatitude() + ", " + location.getLongitude());
 
                     if (location != null) {
                         latitude = location.getLatitude();
                         longitude = location.getLongitude();
+                        Log.e("RHLog", "location: " + latitude + ", " + longitude);
                         return location;
+                    } else {
+                        Log.e("RHLog", "location null ");
                     }
                 }
 
@@ -109,18 +111,19 @@ class GpsTracker extends Service implements LocationListener {
                             MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
                     location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    Log.e("RHLog", "location: " + location.getLatitude() + ", " + location.getLongitude());
 
                     if (location != null) {
                         latitude = location.getLatitude();
                         longitude = location.getLongitude();
+                        Log.e("RHLog", "location: " + latitude + ", " + longitude);
                         return location;
+                    } else {
+                        Log.e("RHLog", "location null ");
                     }
                 }
             }
 
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
