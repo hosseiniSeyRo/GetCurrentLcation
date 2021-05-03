@@ -38,7 +38,7 @@ class GpsTracker2 extends Service implements LocationListener {
         this.mContext = context;
         this.MIN_DISTANCE_CHANGE_FOR_UPDATES = minDistanceChangeForUpdate;
         this.MIN_TIME_BW_UPDATES = minTimeBWUpdate;
-        getCurrentLocation();
+//        getCurrentLocation();
     }
 
     public Boolean hasPermission() {
