@@ -26,7 +26,7 @@ class GpsTracker2 extends Service implements LocationListener {
     private boolean isNetworkEnabled = false;
     private Location location = null;
     private LocationManager locationManager;
-    private final Integer REQUEST_LOCATION_PERMISSION = 1234;
+    static final Integer REQUEST_LOCATION_PERMISSION = 1234;
 
     // The minimum distance to change Updates in meters
     private long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // 0 meters
@@ -42,7 +42,7 @@ class GpsTracker2 extends Service implements LocationListener {
 //        getLocation();
     }
 
-    private Boolean hasPermission() {
+    public Boolean hasPermission() {
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             return true;
 
@@ -50,11 +50,11 @@ class GpsTracker2 extends Service implements LocationListener {
         return false;
     }
 
-    private void getPermission() {
+    public void getPermission() {
         ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
     }
 
-    private boolean canGetLocation() {
+    public boolean canGetLocation() {
         locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
         isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -65,17 +65,16 @@ class GpsTracker2 extends Service implements LocationListener {
     @SuppressLint("MissingPermission")
     public Location getCurrentLocation() {
         getLocationAndItIsNull = false;
-
-        if (!hasPermission()) {
-            getPermission();
-            return null;
-        }
-
-        if (!canGetLocation()) {
-            // no gps and network provider is enabled
-            showSettingsAlert();
-            return null;
-        }
+//        if (!hasPermission()) {
+//            getPermission();
+//            return null;
+//        }
+//
+//        if (!canGetLocation()) {
+//            // no gps and network provider is enabled
+//            showSettingsAlert();
+//            return null;
+//        }
 
         // First get location from Network Provider
         if (isNetworkEnabled) {
@@ -103,7 +102,6 @@ class GpsTracker2 extends Service implements LocationListener {
                 return location;
         }
 
-        getLocationAndItIsNull = true;
         return null;
     }
 
@@ -121,7 +119,7 @@ class GpsTracker2 extends Service implements LocationListener {
      * Function to show settings alert dialog
      * On pressing Settings button will launch Settings Options
      */
-    private void showSettingsAlert() {
+    public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
         alertDialog.setTitle("GPS Setting");
         alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
