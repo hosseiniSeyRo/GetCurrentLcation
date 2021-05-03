@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 class GpsTracker2 extends Service implements LocationListener {
-    public boolean getLocationAndItIsNull = false;
 
     private final Context mContext;
     private boolean isGPSEnabled = false;
@@ -39,7 +38,7 @@ class GpsTracker2 extends Service implements LocationListener {
         this.mContext = context;
         this.MIN_DISTANCE_CHANGE_FOR_UPDATES = minDistanceChangeForUpdate;
         this.MIN_TIME_BW_UPDATES = minTimeBWUpdate;
-//        getLocation();
+        getCurrentLocation();
     }
 
     public Boolean hasPermission() {
@@ -64,17 +63,16 @@ class GpsTracker2 extends Service implements LocationListener {
 
     @SuppressLint("MissingPermission")
     public Location getCurrentLocation() {
-        getLocationAndItIsNull = false;
-//        if (!hasPermission()) {
-//            getPermission();
-//            return null;
-//        }
-//
-//        if (!canGetLocation()) {
-//            // no gps and network provider is enabled
-//            showSettingsAlert();
-//            return null;
-//        }
+        if (!hasPermission()) {
+            getPermission();
+            return null;
+        }
+
+        if (!canGetLocation()) {
+            // no gps and network provider is enabled
+            showSettingsAlert();
+            return null;
+        }
 
         // First get location from Network Provider
         if (isNetworkEnabled) {
