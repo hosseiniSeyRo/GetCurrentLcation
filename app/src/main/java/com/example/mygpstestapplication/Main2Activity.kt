@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class Main2Activity : AppCompatActivity() {
 
-    private val gpsTracker = GpsTracker2(this, 0, 0)
+    private val gpsTracker = GpsTracker3(this, this, 0, 0F)
     lateinit var locationText: TextView
     lateinit var locationButton: Button
 
@@ -37,7 +37,7 @@ class Main2Activity : AppCompatActivity() {
         permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
-            GpsTracker2.REQUEST_LOCATION_PERMISSION -> {
+            GpsTracker3.REQUEST_LOCATION_PERMISSION -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     // Permission is granted
                     gpsTracker.getCurrentLocationIsSuccess()
