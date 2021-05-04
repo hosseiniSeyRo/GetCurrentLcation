@@ -23,9 +23,11 @@ class GpsTracker2 extends Service implements LocationListener {
     private final Context mContext;
     private boolean isGPSEnabled = false;
     private boolean isNetworkEnabled = false;
-    private Location location = null;
+    public Location location = null;
     private LocationManager locationManager;
     static final Integer REQUEST_LOCATION_PERMISSION = 1234;
+    private boolean isFirstTimeGetLocation = true;
+    public boolean pleaseRepeat = false;
 
     // The minimum distance to change Updates in meters
     private long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // 0 meters
@@ -38,7 +40,7 @@ class GpsTracker2 extends Service implements LocationListener {
         this.mContext = context;
         this.MIN_DISTANCE_CHANGE_FOR_UPDATES = minDistanceChangeForUpdate;
         this.MIN_TIME_BW_UPDATES = minTimeBWUpdate;
-//        getCurrentLocation();
+//        getCurrentLocationIsSuccess();
     }
 
     public Boolean hasPermission() {
@@ -62,16 +64,17 @@ class GpsTracker2 extends Service implements LocationListener {
     }
 
     @SuppressLint("MissingPermission")
-    public Location getCurrentLocation() {
+    public Boolean getCurrentLocationIsSuccess() {
         if (!hasPermission()) {
             getPermission();
-            return null;
+            return false;
         }
 
         if (!canGetLocation()) {
-            // no gps and network provider is enabled
+            // gps and network provider is disable
+            Log.e("RHLog", "gps and network provider is disable");
             showSettingsAlert();
-            return null;
+            return false;
         }
 
         // First get location from Network Provider
@@ -83,8 +86,10 @@ class GpsTracker2 extends Service implements LocationListener {
 
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-            if (location != null)
-                return location;
+            if (location != null) {
+                Log.e("RHLog", "network location: " + location.getLatitude() + "***" + location.getLongitude());
+                return true;
+            }
         }
 
         // get location from GPS Provider
@@ -96,11 +101,22 @@ class GpsTracker2 extends Service implements LocationListener {
 
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            if (location != null)
-                return location;
+            if (location != null) {
+                Log.e("RHLog", "gps location: " + location.getLatitude() + "***" + location.getLongitude());
+                return true;
+            }
         }
 
-        return null;
+        if (isFirstTimeGetLocation) {
+            //REPEAT 1 TIME!!!
+            Log.e("RHLog", "please repeat");
+            pleaseRepeat = true;
+            isFirstTimeGetLocation = false;
+            return false;
+        }
+
+        pleaseRepeat = false;
+        return true;
     }
 
     /**
